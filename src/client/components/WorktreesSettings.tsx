@@ -16,6 +16,10 @@ interface Props {
 type Filter = "all" | "linked" | "attention"
 const repoName = (path: string) => path.split(/[\\/]/).filter(Boolean).pop() ?? path
 const relativePath = (repoPath: string, path: string) => path.startsWith(`${repoPath}/`) ? path.slice(repoPath.length + 1) : path
+const DELETE_DEFAULTS_KEY = "dsh-simple-worktree-plus.delete-defaults"
+const loadDeleteDefaults = () => {
+  try { return JSON.parse(localStorage.getItem(DELETE_DEFAULTS_KEY) ?? "") } catch { return {} }
+}
 
 export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, initialScope }: Props) {
   const t = useT()
@@ -29,8 +33,15 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, 
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set())
   const [removal, setRemoval] = useState<{ repo: WorktreeList; row: Worktree } | null>(null)
   const [removalError, setRemovalError] = useState("")
-  const [deleteBranch, setDeleteBranch] = useState(true)
-  const [forceDeleteBranch, setForceDeleteBranch] = useState(true)
+  const defaults = loadDeleteDefaults()
+  const [defaultDeleteBranch, setDefaultDeleteBranch] = useState(defaults.deleteBranch ?? true)
+  const [defaultForceDeleteBranch, setDefaultForceDeleteBranch] = useState(defaults.forceDeleteBranch ?? true)
+  const [deleteBranch, setDeleteBranch] = useState(defaultDeleteBranch)
+  const [forceDeleteBranch, setForceDeleteBranch] = useState(defaultForceDeleteBranch)
+  const saveDeleteDefaults = (nextDeleteBranch: boolean, nextForceDeleteBranch: boolean) => {
+    setDefaultDeleteBranch(nextDeleteBranch); setDefaultForceDeleteBranch(nextForceDeleteBranch)
+    localStorage.setItem(DELETE_DEFAULTS_KEY, JSON.stringify({ deleteBranch: nextDeleteBranch, forceDeleteBranch: nextForceDeleteBranch }))
+  }
   const refreshController = useRef<AbortController | null>(null)
   const refresh = useCallback(async () => {
     refreshController.current?.abort()
@@ -135,6 +146,7 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, 
       <div className="dswt-filters" role="group" aria-label={t("worktrees")}>{([['all', 'filterAll'], ['linked', 'filterLinked'], ['attention', 'filterAttention']] as const).map(([value, label]) => <button key={value} type="button" aria-pressed={filter === value} onClick={() => setFilter(value)}>{t(label)}</button>)}</div>
       <span className="dswt-summary">{repos.length} {t("repositories")}<span aria-hidden="true">·</span>{totalWorktrees} {t("worktreeCount")}</span>
     </div>
+    <fieldset className="dswt-delete-defaults"><legend>{t("deletionDefaults")}</legend><p>{t("deletionDefaultsHint")}</p><label className="dswt-delete-branch"><input type="checkbox" checked={defaultDeleteBranch} onChange={event => saveDeleteDefaults(event.target.checked, event.target.checked ? defaultForceDeleteBranch : false)} />{t("deleteBranch")}</label><label className="dswt-delete-branch"><input type="checkbox" checked={defaultForceDeleteBranch} disabled={!defaultDeleteBranch} onChange={event => saveDeleteDefaults(defaultDeleteBranch, event.target.checked)} />{t("forceDeleteBranch")}</label></fieldset>
     {error ? <div className="dswt-error" role="alert"><AlertCircle size={16} /><span>{error}</span><Button className="dswt-button-ghost" disabled={busy} onClick={() => void refresh()}>{t("retry")}</Button></div> : null}
     {busy ? <div className="dswt-loading-message" role="status"><Loader2 size={14} className="dswt-spin" /><span>{t("scanning")}</span></div> : null}
     {busy && repos.length === 0 ? <div className="dswt-skeleton-list" aria-hidden="true">{[0, 1, 2].map(index => <div className="dswt-skeleton-row" key={index}><span /><div><span /><span /></div></div>)}</div> : null}
@@ -158,7 +170,7 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, 
               return <div className="dswt-worktree" key={row.path}>
                 <GitFork size={16} className="dswt-tree-icon" aria-hidden="true" />
                 <div className="dswt-worktree-info"><div className="dswt-worktree-title"><strong>{row.branch ?? t("detached")}</strong><span className={`dswt-status dswt-status-${state}`} title={row.statusError}><span className="dswt-status-dot" />{statusLabel(row)}</span>{row.locked ? <span className="dswt-status">{t("locked")}</span> : null}</div><div className="dswt-worktree-path" title={row.path}>{relativePath(repo.repoPath, row.path)}</div></div>
-                <div className="dswt-worktree-actions"><Button className="dswt-icon-button" disabled={!!action || busy || !!row.statusError} aria-label={t("openSession")} title={t("openSession")} onClick={() => void openSession(repo, row)}>{action === `open:${row.path}` ? <Loader2 size={15} className="dswt-spin" /> : <ArrowUpRight size={16} />}</Button><Button className="dswt-icon-button dswt-delete-action" disabled={busy || !!action || !!row.changedFiles || row.locked} aria-label={t("remove")} title={removeReason} onClick={() => { setRemovalError(""); setDeleteBranch(true); setForceDeleteBranch(true); setRemoval({ repo, row }) }}><Trash2 size={15} /></Button></div>
+                <div className="dswt-worktree-actions"><Button className="dswt-icon-button" disabled={!!action || busy || !!row.statusError} aria-label={t("openSession")} title={t("openSession")} onClick={() => void openSession(repo, row)}>{action === `open:${row.path}` ? <Loader2 size={15} className="dswt-spin" /> : <ArrowUpRight size={16} />}</Button><Button className="dswt-icon-button dswt-delete-action" disabled={busy || !!action || !!row.changedFiles || row.locked} aria-label={t("remove")} title={removeReason} onClick={() => { setRemovalError(""); setDeleteBranch(defaultDeleteBranch); setForceDeleteBranch(defaultForceDeleteBranch); setRemoval({ repo, row }) }}><Trash2 size={15} /></Button></div>
               </div>
             })}
           </div> : null}

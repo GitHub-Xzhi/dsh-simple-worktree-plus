@@ -43,7 +43,7 @@ function visibleRepositories() {
   return screen.queryAllByRole("heading", { level: 3 }).map(node => node.textContent)
 }
 
-afterEach(() => { cleanup(); vi.restoreAllMocks() })
+afterEach(() => { cleanup(); vi.restoreAllMocks(); localStorage.clear() })
 
 describe("WorktreesSettings discovery controls", () => {
   const repos = [
@@ -143,6 +143,17 @@ describe("WorktreesSettings discovery controls", () => {
 })
 
 describe("WorktreesSettings safe removal", () => {
+  it("uses saved default deletion options for the next confirmation dialog", async () => {
+    const next = setup()
+    next.mount()
+    await settled()
+    const user = userEvent.setup()
+    await user.click(screen.getByRole("checkbox", { name: t("deleteBranch") }))
+    expect(localStorage.getItem("dsh-simple-worktree-plus.delete-defaults")).toContain("false")
+    await user.click(screen.getByRole("button", { name: t("remove") }))
+    expect(within(screen.getByRole("dialog")).getByRole("checkbox", { name: t("deleteBranch") })).toHaveProperty("checked", false)
+  })
+
   it("uses an in-app confirmation with the target and branch-preservation message; cancellation performs no mutation", async () => {
     const confirm = vi.spyOn(window, "confirm").mockReturnValue(true)
     const next = setup()

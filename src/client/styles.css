@@ -49,6 +49,9 @@
   .dswt-scope .dswt-select { appearance: none; padding-right: 30px; background: var(--wt-soft); border-color: transparent; text-overflow: ellipsis; cursor: pointer; }
   .dswt-scope > svg { position: absolute; right: 10px; top: 11px; pointer-events: none; color: var(--wt-secondary); }
   .dswt-list-controls { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .dswt-delete-defaults { display: grid; gap: 8px; margin: 0 0 14px; border: 1px solid var(--wt-line); border-radius: 9px; padding: 10px 12px; }
+  .dswt-delete-defaults legend { padding: 0 4px; color: var(--wt-text); font-size: 12px; font-weight: 500; }
+  .dswt-delete-defaults p { color: var(--wt-secondary); font-size: 12px; line-height: 18px; }
   .dswt-filters { display: inline-flex; align-items: center; gap: 3px; }
   .dswt-filters button { border: 0; border-radius: 7px; padding: 4px 9px; background: transparent; color: var(--wt-secondary); font: inherit; font-size: 12px; line-height: 20px; cursor: pointer; }
   .dswt-filters button:hover { background: var(--wt-hover); }
