@@ -1,4 +1,4 @@
-@layer dsh-simple-worktree {
+@layer dsh-simple-worktree-plus {
   /* DSH owns typography and colour. Keep these aliases local to our surfaces. */
   .dswt-settings, .dswt-dialog-content, .dswt-new-session-action {
     --wt-text: var(--dsw-alias-label-primary);

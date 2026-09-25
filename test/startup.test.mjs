@@ -13,10 +13,10 @@ class MemorySettings extends SettingsProvider {
 }
 
 const endpoints = ["worktree.list", "worktree.scan", "worktree.classify", "worktree.create", "worktree.remove", "worktree.remove-session", "worktree.status", "worktree.prune"]
-const requestFor = (endpoint, overrides = {}) => new Request(`http://localhost/api/dsh-simple-worktree/${endpoint}`, {
+const requestFor = (endpoint, overrides = {}) => new Request(`http://localhost/api/dsh-simple-worktree-plus/${endpoint}`, {
   method: "POST",
   headers: { "content-type": "application/json" },
-  body: JSON.stringify({ type: "client-request", rpcId: "startup-test", method: `dsh-simple-worktree/${endpoint}`, payload: {}, ...overrides }),
+  body: JSON.stringify({ type: "client-request", rpcId: "startup-test", method: `dsh-simple-worktree-plus/${endpoint}`, payload: {}, ...overrides }),
 })
 
 describe.each([
@@ -48,7 +48,7 @@ describe.each([
       for (let attempt = 0; attempt < 2; attempt++) {
         const fiber = root.plugin(plugin)
         await fiber
-        expect(namespaces()).toEqual(["dsh-simple-worktree"])
+        expect(namespaces()).toEqual(["dsh-simple-worktree-plus"])
         for (const endpoint of endpoints) {
           const response = await carrier.fetch(requestFor(endpoint))
           expect(response.status).toBe(200)
@@ -60,7 +60,7 @@ describe.each([
         expect((await mismatched.json()).result).toMatchObject({ ok: false, error: { code: "bad-request" } })
         const invalid = await carrier.fetch(requestFor("worktree.prune", { type: "invalid" }))
         expect(invalid.status).toBe(400)
-        const nonJson = await carrier.fetch(new Request("http://localhost/api/dsh-simple-worktree/worktree.prune", { method: "POST", body: "not JSON" }))
+        const nonJson = await carrier.fetch(new Request("http://localhost/api/dsh-simple-worktree-plus/worktree.prune", { method: "POST", body: "not JSON" }))
         expect(nonJson.status).toBe(415)
         await fiber.dispose()
         expect(namespaces()).toEqual([])

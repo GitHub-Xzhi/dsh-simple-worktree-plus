@@ -2,9 +2,9 @@
 
 一个用于 DeepSeek Harness 的 Git Worktree 插件：创建任务分支、注册 DSH Workspace，并打开隔离会话。
 
-> npm 包：`@alpacachen/dsh-simple-worktree`
+> npm 包：`@Xzhi/dsh-simple-worktree-plus`
 
-[![npm version](https://img.shields.io/npm/v/@alpacachen/dsh-simple-worktree?color=5b8def&label=npm)](https://www.npmjs.com/package/@alpacachen/dsh-simple-worktree)
+[![npm version](https://img.shields.io/npm/v/@Xzhi/dsh-simple-worktree-plus?color=5b8def&label=npm)](https://www.npmjs.com/package/@Xzhi/dsh-simple-worktree-plus)
 ![DeepSeek Harness Plugin](https://img.shields.io/badge/DeepSeek%20Harness-Plugin-7c5cff)
 [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
 ![License](https://img.shields.io/badge/license-MIT-22c55e)
@@ -32,7 +32,7 @@
 ### 安装
 
 ```sh
-dsh plugin --profile web add @alpacachen/dsh-simple-worktree
+dsh plugin --profile web add @Xzhi/dsh-simple-worktree-plus
 ```
 
 安装后重启 `dsh web`。

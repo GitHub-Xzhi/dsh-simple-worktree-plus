@@ -28,7 +28,7 @@ export type WorktreeClientContext = Context & {
   connection: ConnectionHandle
 }
 
-const STYLE_TAG = "data-dsh-simple-worktree-style"
+const STYLE_TAG = "data-dsh-simple-worktree-plus-style"
 
 function installStyles() {
   if (typeof document === "undefined" || document.querySelector(`style[${STYLE_TAG}]`)) return () => {}
@@ -40,11 +40,11 @@ function installStyles() {
 }
 
 export const WorktreePlugin = {
-  name: "@alpacachen/dsh-simple-worktree",
+  name: "@Xzhi/dsh-simple-worktree-plus",
   inject: ["slots", "connection", "locale", "workspaces", "sessions"],
   apply(ctx: WorktreeClientContext) {
-    ctx.effect(installStyles, "dsh-simple-worktree styles")
-    ctx.effect(() => installLocale(ctx), "dsh-simple-worktree locale")
+    ctx.effect(installStyles, "dsh-simple-worktree-plus styles")
+    ctx.effect(() => installLocale(ctx), "dsh-simple-worktree-plus locale")
     const api = createWorktreeApi(ctx.connection)
     const workspaces = ctx.workspaces
     const sessions = ctx.sessions
@@ -97,7 +97,7 @@ export const WorktreePlugin = {
         dispose()
         classificationListeners.clear()
       }
-    }, "dsh-simple-worktree workspace classification")
+    }, "dsh-simple-worktree-plus workspace classification")
 
     function WorktreeOverlay() {
       const [request, setRequest] = useState<{ target: Pick<Workspace, "path" | "title">; defaultBaseChoice: "current" | "main" } | null>(null)
@@ -136,12 +136,12 @@ export const WorktreePlugin = {
     }
 
     ctx.slots.inject("conversation.input.dock", () => ctx.slots.register(
-      { name: "conversation.input.dock", id: "dsh-simple-worktree-new-session", order: -30, label: () => t("createWorktree") },
+      { name: "conversation.input.dock", id: "dsh-simple-worktree-plus-new-session", order: -30, label: () => t("createWorktree") },
       (props: PropsRuntime<"conversation.input.dock">) => <WorktreeDock {...props} />,
     ))
 
     ctx.slots.inject("shell.overlay", () => ctx.slots.register(
-      { name: "shell.overlay", id: "dsh-simple-worktree-create", order: 30, label: () => t("createWorktree") },
+      { name: "shell.overlay", id: "dsh-simple-worktree-plus-create", order: 30, label: () => t("createWorktree") },
       WorktreeOverlay,
     ))
 
@@ -149,7 +149,7 @@ export const WorktreePlugin = {
     // the other built-in settings pages. This is intentionally not a plugin
     // configuration item: Worktree management is a standalone workspace tool.
     ctx.slots.inject("settings.section", () => ctx.slots.register(
-      { name: "settings.section", id: "dsh-simple-worktree", order: 45, label: () => t("worktrees"), inject: () => ({}) },
+      { name: "settings.section", id: "dsh-simple-worktree-plus", order: 45, label: () => t("worktrees"), inject: () => ({}) },
       (props: PropsRuntime<"settings.section">) => <WorktreesSettings api={api} workspaces={workspaces} sessions={sessions} close={props.close} onCreate={(target) => { props.close(); openCreate(target, "main") }} />,
     ))
   },

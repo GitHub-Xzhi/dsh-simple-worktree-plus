@@ -84,7 +84,7 @@ describe("registered worktree dock classification reactivity", () => {
     render(host.element)
     expect(button()).toBeNull()
     expect(host.call).toHaveBeenCalledTimes(1)
-    expect(host.call.mock.calls[0].slice(0, 3)).toEqual(["/api", "dsh-simple-worktree/worktree.classify", { path: "/repo/" }])
+    expect(host.call.mock.calls[0].slice(0, 3)).toEqual(["/api", "dsh-simple-worktree-plus/worktree.classify", { path: "/repo/" }])
     await host.resolve(0, true, false)
     expect(button()).not.toBeNull()
     expect(host.call).toHaveBeenCalledTimes(1)

@@ -10,7 +10,7 @@ function classifyError(code: unknown, message: string): string | undefined {
 
 export function createWorktreeApi(connection: ConnectionService) {
   async function call<T>(endpoint: string, payload: Record<string, unknown>, signal?: AbortSignal): Promise<T> {
-    const args = [CHANNEL, `dsh-simple-worktree/${endpoint}`, payload] as const
+    const args = [CHANNEL, `dsh-simple-worktree-plus/${endpoint}`, payload] as const
     const result = await (signal ? connection.rpc.call(...args, signal) : connection.rpc.call(...args)) as any
     if (!result?.ok) {
       const message = result?.error?.message ?? "worktree operation failed"

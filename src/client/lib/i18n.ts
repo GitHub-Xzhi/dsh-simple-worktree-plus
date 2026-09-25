@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react"
 
-export const NS = "dsh-simple-worktree"
+export const NS = "dsh-simple-worktree-plus"
 type Dict = Record<string, string>
 
 const zh: Dict = {

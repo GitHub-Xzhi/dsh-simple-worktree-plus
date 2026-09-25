@@ -2,9 +2,9 @@
 
 A Git worktree plugin for DeepSeek Harness that creates task branches, registers worktrees as DSH Workspaces, and opens isolated sessions.
 
-> npm package: `@alpacachen/dsh-simple-worktree`
+> npm package: `@Xzhi/dsh-simple-worktree-plus`
 
-[![npm version](https://img.shields.io/npm/v/@alpacachen/dsh-simple-worktree?color=5b8def&label=npm)](https://www.npmjs.com/package/@alpacachen/dsh-simple-worktree)
+[![npm version](https://img.shields.io/npm/v/@Xzhi/dsh-simple-worktree-plus?color=5b8def&label=npm)](https://www.npmjs.com/package/@Xzhi/dsh-simple-worktree-plus)
 ![DeepSeek Harness Plugin](https://img.shields.io/badge/DeepSeek%20Harness-Plugin-7c5cff)
 [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
 ![License](https://img.shields.io/badge/license-MIT-22c55e)
@@ -32,7 +32,7 @@ Built against the DSH **0.1.5** client contract (`0.1.5-rc.1 || 0.1.5-rc.2`, web
 ### Install
 
 ```sh
-dsh plugin --profile web add @alpacachen/dsh-simple-worktree
+dsh plugin --profile web add @Xzhi/dsh-simple-worktree-plus
 ```
 
 Restart `dsh web` after installation.

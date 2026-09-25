@@ -32,8 +32,8 @@ function handleFor(outputs = {}) {
     effect(effect) { return effect() },
   }
   apply(ctx)
-  const handler = async (endpoint, payload = {}, signal, method = `dsh-simple-worktree/${endpoint}`) => {
-    const path = `/api/dsh-simple-worktree/${endpoint}`
+  const handler = async (endpoint, payload = {}, signal, method = `dsh-simple-worktree-plus/${endpoint}`) => {
+    const path = `/api/dsh-simple-worktree-plus/${endpoint}`
     const route = routes.get(path)
     expect(route, `missing exact route: ${path}`).toBeDefined()
     expect(route.methods).toEqual(["POST"])
@@ -165,7 +165,7 @@ describe("worktree RPC contract", () => {
     expect([...handleFor().routes.keys()].sort()).toEqual([
       "worktree.list", "worktree.scan", "worktree.classify", "worktree.create",
       "worktree.remove", "worktree.remove-session", "worktree.status", "worktree.prune",
-    ].map((endpoint) => `/api/dsh-simple-worktree/${endpoint}`).sort())
+    ].map((endpoint) => `/api/dsh-simple-worktree-plus/${endpoint}`).sort())
   })
 
   const porcelain = [
@@ -223,7 +223,7 @@ describe("worktree RPC contract", () => {
   it("returns the stable error envelope for bad requests and cancellation", async () => {
     const handler = handleFor()
     expect(await handler("worktree.list", {})).toMatchObject({ ok: false, error: { code: "bad-request", details: { issues: [] } } })
-    expect(await handler("worktree.list", {}, undefined, "dsh-simple-worktree/worktree.unknown")).toMatchObject({
+    expect(await handler("worktree.list", {}, undefined, "dsh-simple-worktree-plus/worktree.unknown")).toMatchObject({
       ok: false, error: { code: "bad-request", message: "RPC method does not match endpoint.", details: { issues: [] } },
     })
     expect(await handler("worktree.list", {}, { aborted: true })).toMatchObject({ ok: false, error: { code: "cancelled" } })

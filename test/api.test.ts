@@ -91,7 +91,7 @@ describe("worktree client API routing", () => {
     const invoke = api[operation] as (argument: unknown) => Promise<unknown>
 
     await expect(invoke(argument)).resolves.toBe(value)
-    const args = ["/api", `dsh-simple-worktree/${endpoint}`, payload]
+    const args = ["/api", `dsh-simple-worktree-plus/${endpoint}`, payload]
     if (["list", "scan", "classify", "status"].includes(operation)) args.push(expect.any(AbortSignal))
     expect(call.mock.calls).toEqual([args])
   })
@@ -107,7 +107,7 @@ describe("worktree client API routing", () => {
     const api = createWorktreeApi({ rpc: { call } })
 
     await expect(api.list("/repo")).rejects.toMatchObject({ message, code })
-    expect(call.mock.calls).toEqual([["/api", "dsh-simple-worktree/worktree.list", { path: "/repo" }, expect.any(AbortSignal)]])
+    expect(call.mock.calls).toEqual([["/api", "dsh-simple-worktree-plus/worktree.list", { path: "/repo" }, expect.any(AbortSignal)]])
   })
 
   it("propagates transport failures without wrapping or retrying them", async () => {
@@ -116,6 +116,6 @@ describe("worktree client API routing", () => {
     const api = createWorktreeApi({ rpc: { call } })
 
     await expect(api.list("/repo")).rejects.toBe(error)
-    expect(call.mock.calls).toEqual([["/api", "dsh-simple-worktree/worktree.list", { path: "/repo" }, expect.any(AbortSignal)]])
+    expect(call.mock.calls).toEqual([["/api", "dsh-simple-worktree-plus/worktree.list", { path: "/repo" }, expect.any(AbortSignal)]])
   })
 })
