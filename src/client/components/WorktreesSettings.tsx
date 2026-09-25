@@ -14,6 +14,7 @@ interface Props {
   initialScope?: string
 }
 type Filter = "all" | "linked" | "attention"
+type Tab = "worktrees" | "defaults"
 const repoName = (path: string) => path.split(/[\\/]/).filter(Boolean).pop() ?? path
 const relativePath = (repoPath: string, path: string) => path.startsWith(`${repoPath}/`) ? path.slice(repoPath.length + 1) : path
 const DELETE_DEFAULTS_KEY = "dsh-simple-worktree-plus.delete-defaults"
@@ -30,6 +31,7 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, 
   const [scope, setScope] = useState(initialScope ?? "")
   const [query, setQuery] = useState("")
   const [filter, setFilter] = useState<Filter>("all")
+  const [tab, setTab] = useState<Tab>("worktrees")
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set())
   const [removal, setRemoval] = useState<{ repo: WorktreeList; row: Worktree } | null>(null)
   const [removalError, setRemovalError] = useState("")
@@ -137,6 +139,8 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, 
     <header className="dswt-settings-header">
       <div><h2>{t("worktrees")}</h2><p>{t("panelDescription")}</p></div>
     </header>
+    <div className="dswt-management-tabs" role="tablist" aria-label={t("worktrees")}><button type="button" role="tab" aria-selected={tab === "worktrees"} onClick={() => setTab("worktrees")}>{t("managementTab")}</button><button type="button" role="tab" aria-selected={tab === "defaults"} onClick={() => setTab("defaults")}>{t("deletionDefaults")}</button></div>
+    {tab === "defaults" ? <fieldset className="dswt-delete-defaults"><legend>{t("deletionDefaults")}</legend><p>{t("deletionDefaultsHint")}</p><label className="dswt-delete-branch"><input type="checkbox" checked={defaultDeleteBranch} onChange={event => saveDeleteDefaults(event.target.checked, event.target.checked ? defaultForceDeleteBranch : false)} />{t("deleteBranch")}</label><label className="dswt-delete-branch"><input type="checkbox" checked={defaultForceDeleteBranch} disabled={!defaultDeleteBranch} onChange={event => saveDeleteDefaults(defaultDeleteBranch, event.target.checked)} />{t("forceDeleteBranch")}</label></fieldset> : <>
     <div className="dswt-toolbar">
       <label className="dswt-search"><Search size={16} aria-hidden="true" /><Input aria-label={t("searchPlaceholder")} placeholder={t("searchPlaceholder")} value={query} onChange={event => setQuery(event.target.value)} />{query ? <Button className="dswt-icon-button" aria-label={t("clearFilters")} onClick={() => setQuery("")}><X size={14} /></Button> : null}</label>
       <div className="dswt-scope"><Select aria-label={t("scanScope")} value={scope} onChange={event => setScope(event.target.value)}><option value="">{t("allWorkspaces")}</option>{workspaces.list.getSnapshot().items.map(workspace => <option key={workspace.workspaceId} value={workspace.path}>{workspace.title}</option>)}</Select><ChevronDown size={14} aria-hidden="true" /></div>
@@ -146,7 +150,6 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, 
       <div className="dswt-filters" role="group" aria-label={t("worktrees")}>{([['all', 'filterAll'], ['linked', 'filterLinked'], ['attention', 'filterAttention']] as const).map(([value, label]) => <button key={value} type="button" aria-pressed={filter === value} onClick={() => setFilter(value)}>{t(label)}</button>)}</div>
       <span className="dswt-summary">{repos.length} {t("repositories")}<span aria-hidden="true">·</span>{totalWorktrees} {t("worktreeCount")}</span>
     </div>
-    <fieldset className="dswt-delete-defaults"><legend>{t("deletionDefaults")}</legend><p>{t("deletionDefaultsHint")}</p><label className="dswt-delete-branch"><input type="checkbox" checked={defaultDeleteBranch} onChange={event => saveDeleteDefaults(event.target.checked, event.target.checked ? defaultForceDeleteBranch : false)} />{t("deleteBranch")}</label><label className="dswt-delete-branch"><input type="checkbox" checked={defaultForceDeleteBranch} disabled={!defaultDeleteBranch} onChange={event => saveDeleteDefaults(defaultDeleteBranch, event.target.checked)} />{t("forceDeleteBranch")}</label></fieldset>
     {error ? <div className="dswt-error" role="alert"><AlertCircle size={16} /><span>{error}</span><Button className="dswt-button-ghost" disabled={busy} onClick={() => void refresh()}>{t("retry")}</Button></div> : null}
     {busy ? <div className="dswt-loading-message" role="status"><Loader2 size={14} className="dswt-spin" /><span>{t("scanning")}</span></div> : null}
     {busy && repos.length === 0 ? <div className="dswt-skeleton-list" aria-hidden="true">{[0, 1, 2].map(index => <div className="dswt-skeleton-row" key={index}><span /><div><span /><span /></div></div>)}</div> : null}
@@ -178,6 +181,7 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, 
       })}
     </div>
     <details className="dswt-scan-help"><summary>{t("scanHelp")}</summary><p>{t("worktreesSubtitle")}</p></details>
+    </>}
     <Dialog open={!!removal} onOpenChange={open => { if (!open && !action) setRemoval(null) }}>
       {removal ? <DialogContent busy={!!action} className="dswt-confirm-dialog"><div className="dswt-dialog-heading"><DialogTitle className="dswt-dialog-title">{t("removeTitle")}</DialogTitle><DialogDescription className="dswt-form-note">{t("removeDescription")}</DialogDescription></div><div className="dswt-dialog-body"><div className="dswt-remove-target"><GitFork size={18} /><div><strong>{removal.row.branch ?? t("detached")}</strong><code>{removal.row.path}</code></div></div>{removal.row.branch ? <div className="dswt-delete-options"><label className="dswt-delete-branch"><input type="checkbox" checked={deleteBranch} disabled={!!action} onChange={event => setDeleteBranch(event.target.checked)} />{t("deleteBranch")}</label><label className="dswt-delete-branch"><input type="checkbox" checked={forceDeleteBranch} disabled={!!action || !deleteBranch} onChange={event => setForceDeleteBranch(event.target.checked)} />{t("forceDeleteBranch")}</label></div> : <p className="dswt-preserved"><Check size={14} />{t("branchPreserved")}</p>}{removalError ? <div className="dswt-error" role="alert"><AlertCircle size={16} /><span>{removalError}</span></div> : null}</div><div className="dswt-dialog-footer"><Button className="dswt-button-ghost" disabled={!!action} onClick={() => setRemoval(null)}>{t("cancel")}</Button><Button className="dswt-button-danger-solid" disabled={!!action} onClick={() => void remove()}>{action ? <Loader2 size={14} className="dswt-spin" /> : <Trash2 size={14} />}{action ? t("removing") : t("removeConfirmAction")}</Button></div></DialogContent> : null}
     </Dialog>
