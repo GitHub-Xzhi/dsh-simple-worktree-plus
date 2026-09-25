@@ -3,7 +3,7 @@ import { createWorktreeApi } from "../src/client/lib/api"
 
 describe("worktree client API routing", () => {
   const createPayload = { repoPath: "/repo", path: "/repo.worktrees/task", branch: "task", baseRef: "main" }
-  const removePayload = { repoPath: "/repo", path: "/repo.worktrees/task", branch: "task", deleteBranch: true }
+  const removePayload = { repoPath: "/repo", path: "/repo.worktrees/task", branch: "task", deleteBranch: true, forceDeleteBranch: true }
 
   afterEach(() => vi.useRealTimers())
 

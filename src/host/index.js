@@ -259,6 +259,7 @@ export function apply(ctx) {
       const path = typeof payload.path === 'string' ? payload.path.trim() : ''
       const branch = typeof payload.branch === 'string' ? payload.branch.trim() : ''
       const deleteBranch = payload.deleteBranch === true
+      const forceDeleteBranch = payload.forceDeleteBranch === true
       if (!repoPath || !path) throw new Error('Repository and worktree paths are required.')
       let orphaned = false
       let pruned = false
@@ -271,7 +272,7 @@ export function apply(ctx) {
           pruned = true
         } else throw error
       }
-      if (deleteBranch && branch) await runGit(ctx.subprocess, repoPath, ['branch', '-d', branch])
+      if (deleteBranch && branch) await runGit(ctx.subprocess, repoPath, ['branch', forceDeleteBranch ? '-D' : '-d', branch])
       return { removed: true, path, orphaned, pruned, branchDeleted: deleteBranch && Boolean(branch) }
     })
 
