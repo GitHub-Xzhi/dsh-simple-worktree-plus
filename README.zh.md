@@ -1,60 +1,39 @@
-# dsh-worktree
+﻿# DSH Simple Worktree Plus
 
-一个用于 DeepSeek Harness 的 Git Worktree 插件：创建任务分支、注册 DSH Workspace，并打开隔离会话。
+`@Xzhi/dsh-simple-worktree-plus` 是一个用于 [DeepSeek Harness](https://github.com/deepseek-ai/DeepSeek-Harness) 的 Git Worktree 管理插件。
 
-> npm 包：`@Xzhi/dsh-simple-worktree-plus`
+本项目基于 [alpacachen/dsh-worktree](https://github.com/alpacachen/dsh-worktree) 的开源实现继续开发，感谢原项目提供的 Worktree 创建、Workspace 注册与隔离会话能力。
 
-[![npm version](https://img.shields.io/npm/v/@Xzhi/dsh-simple-worktree-plus?color=5b8def&label=npm)](https://www.npmjs.com/package/@Xzhi/dsh-simple-worktree-plus)
-![DeepSeek Harness Plugin](https://img.shields.io/badge/DeepSeek%20Harness-Plugin-7c5cff)
-[![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
-![License](https://img.shields.io/badge/license-MIT-22c55e)
+在此基础上，Plus 版本扩展了 Worktree 的删除策略、管理入口与按工作区管理能力，使日常多分支任务切换和清理更加直接。
 
-**简体中文** · [English](README.md)
-
-![从 DSH 新建对话创建 Worktree](docs/preview.png)
-
-## 功能
-
-- 从任意 Git Workspace 的新建对话入口创建 Worktree。
-- 支持当前分支和仓库主分支。
-- 将新 Worktree 注册为 DSH Workspace，并打开隔离会话。
-- 自动创建 `task/<name>` 格式的任务分支。
-- 在**设置 → Worktree 管理**页面扫描并管理所有 Worktree。
-- 不需要额外服务或项目配置。
-- 支持 DSH 主题、中文和英文界面。
-
-## 兼容性
-
-基于 DSH **0.1.5** 客户端契约构建（`0.1.5-rc.1 || 0.1.5-rc.2`，web profile）。
-
-## 使用
-
-### 安装
+## 安装
 
 ```sh
 dsh plugin --profile web add @Xzhi/dsh-simple-worktree-plus
 ```
 
-安装后重启 `dsh web`。
+安装或升级后重启 `dsh web`，再刷新页面。
 
-也可以通过 GitHub 安装：`dsh plugin --profile web add github:alpacachen/dsh-worktree`。
+## 使用
 
-### 从新建对话创建
+- 在 Git Workspace 的新建会话中创建 Worktree；
+- 通过侧边栏 **Worktree 管理** 查看全部 Workspace 的 Worktree；
+- 右键指定 Workspace，选择 **Worktree 管理**，只扫描该 Workspace；
+- 删除 Worktree 时根据确认弹窗中的选项，一并删除对应 Git 分支。
 
-1. 在 Git Workspace 中打开**新建对话**。
-2. 点击输入框上方的**创建 Worktree**。
-3. 输入任务名称；此入口默认选择仓库主分支。
-4. 点击**创建并打开**。
+## Plus 新增功能
 
-### 管理 Worktree
+| 功能 | 说明 |
+| --- | --- |
+| 删除时管理分支 | 删除 Worktree 时可同时删除对应 Git 分支。 |
+| 默认删除分支 | “同时删除 Git 分支”默认勾选。 |
+| 强制删除未合并分支 | 可使用 `git branch -D` 删除未合并分支；默认勾选，请谨慎使用。 |
+| 顶部管理入口 | 在顶部 Workspace 选择器旁提供 Worktree 管理入口。 |
+| 侧边栏管理入口 | 在左侧边栏 **设置** 上方提供 Worktree 管理入口。 |
+| 指定 Workspace 管理 | 右键某个 Workspace 后打开仅针对该 Workspace 的 Worktree 管理。 |
+| 删除选项默认值 | 可在 Worktree 管理中设置下次打开删除确认弹窗时的默认勾选状态。 |
+| 插件独立命名 | 包名和 DSH 插件标识调整为 `@Xzhi/dsh-simple-worktree-plus`，可与原插件区分安装。 |
 
-打开**设置 → Worktree 管理**，扫描所有 Workspace 中的 Git 项目和关联的 Worktree，查看它们的分支与变更状态，并移除不再需要的 Worktree。
+## 风险提示
 
-Worktree 会创建在：
-
-```text
-project.worktrees/login-fix/
-└── branch: task/login-fix
-```
-
-新 Workspace 的名称为 `<父 Workspace>/<任务名称>`。删除 Worktree Workspace 不会删除对应的 Git 分支。
+启用“强制删除未合并的 Git 分支”会永久移除该本地分支中未合并的提交。删除前请确认重要提交已经推送、合并或另有备份。
