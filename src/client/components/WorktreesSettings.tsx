@@ -28,7 +28,7 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate }
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set())
   const [removal, setRemoval] = useState<{ repo: WorktreeList; row: Worktree } | null>(null)
   const [removalError, setRemovalError] = useState("")
-  const [deleteBranch, setDeleteBranch] = useState(false)
+  const [deleteBranch, setDeleteBranch] = useState(true)
   const refreshController = useRef<AbortController | null>(null)
   const refresh = useCallback(async () => {
     refreshController.current?.abort()
@@ -155,7 +155,7 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate }
               return <div className="dswt-worktree" key={row.path}>
                 <GitFork size={16} className="dswt-tree-icon" aria-hidden="true" />
                 <div className="dswt-worktree-info"><div className="dswt-worktree-title"><strong>{row.branch ?? t("detached")}</strong><span className={`dswt-status dswt-status-${state}`} title={row.statusError}><span className="dswt-status-dot" />{statusLabel(row)}</span>{row.locked ? <span className="dswt-status">{t("locked")}</span> : null}</div><div className="dswt-worktree-path" title={row.path}>{relativePath(repo.repoPath, row.path)}</div></div>
-                <div className="dswt-worktree-actions"><Button className="dswt-icon-button" disabled={!!action || busy || !!row.statusError} aria-label={t("openSession")} title={t("openSession")} onClick={() => void openSession(repo, row)}>{action === `open:${row.path}` ? <Loader2 size={15} className="dswt-spin" /> : <ArrowUpRight size={16} />}</Button><Button className="dswt-icon-button dswt-delete-action" disabled={busy || !!action || !!row.changedFiles || row.locked} aria-label={t("remove")} title={removeReason} onClick={() => { setRemovalError(""); setDeleteBranch(false); setRemoval({ repo, row }) }}><Trash2 size={15} /></Button></div>
+                <div className="dswt-worktree-actions"><Button className="dswt-icon-button" disabled={!!action || busy || !!row.statusError} aria-label={t("openSession")} title={t("openSession")} onClick={() => void openSession(repo, row)}>{action === `open:${row.path}` ? <Loader2 size={15} className="dswt-spin" /> : <ArrowUpRight size={16} />}</Button><Button className="dswt-icon-button dswt-delete-action" disabled={busy || !!action || !!row.changedFiles || row.locked} aria-label={t("remove")} title={removeReason} onClick={() => { setRemovalError(""); setDeleteBranch(true); setRemoval({ repo, row }) }}><Trash2 size={15} /></Button></div>
               </div>
             })}
           </div> : null}
