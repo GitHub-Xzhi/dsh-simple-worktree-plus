@@ -11,18 +11,19 @@ interface Props {
   sessions: SessionsService
   close?: () => void
   onCreate?: (target: Pick<Workspace, "path" | "title">) => void
+  initialScope?: string
 }
 type Filter = "all" | "linked" | "attention"
 const repoName = (path: string) => path.split(/[\\/]/).filter(Boolean).pop() ?? path
 const relativePath = (repoPath: string, path: string) => path.startsWith(`${repoPath}/`) ? path.slice(repoPath.length + 1) : path
 
-export function WorktreesSettings({ api, workspaces, sessions, close, onCreate }: Props) {
+export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, initialScope }: Props) {
   const t = useT()
   const [repos, setRepos] = useState<WorktreeList[]>([])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState("")
   const [action, setAction] = useState<string | null>(null)
-  const [scope, setScope] = useState("")
+  const [scope, setScope] = useState(initialScope ?? "")
   const [query, setQuery] = useState("")
   const [filter, setFilter] = useState<Filter>("all")
   const [collapsed, setCollapsed] = useState<Set<string>>(() => new Set())
@@ -61,6 +62,7 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate }
       if (!controller.signal.aborted) setBusy(false)
     }
   }, [api, workspaces, scope, t])
+  useEffect(() => { setScope(initialScope ?? "") }, [initialScope])
   useEffect(() => {
     void refresh()
     return () => { refreshController.current?.abort() }

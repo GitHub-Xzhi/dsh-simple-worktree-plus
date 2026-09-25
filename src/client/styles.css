@@ -158,6 +158,8 @@
   .dswt-sidebar-action:empty { display: none; }
   .dswt-sidebar-button { width: 100%; justify-content: flex-start; min-height: 36px; padding: 6px 12px; border-color: transparent; border-radius: 8px; color: var(--dsw-alias-label-secondary); font-size: 13px; }
   .dswt-sidebar-button:hover:not(:disabled) { background: var(--dsw-alias-interactive-bg-hover); color: var(--dsw-alias-label-primary); }
+  .dswt-context-menu-item { width: 100%; justify-content: flex-start; min-height: 32px; border: 0; border-radius: 0; padding: 6px 10px; color: var(--dsw-alias-label-primary); }
+  .dswt-context-menu-item:hover:not(:disabled) { background: var(--dsw-alias-interactive-bg-hover); }
   .dswt-management-dialog { width: min(760px, calc(100vw - 32px)); }
   .dswt-management-body { padding: 12px 24px 18px; }
   .dswt-management-body .dswt-settings { max-height: min(650px, calc(100dvh - 180px)); overflow: auto; padding-right: 4px; }

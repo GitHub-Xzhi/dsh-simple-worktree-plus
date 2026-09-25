@@ -16,6 +16,7 @@ import { GitTreeIcon } from "./components/GitTreeIcon"
 import { NewSessionWorktreeButton } from "./components/NewSessionWorktreeButton"
 import { WorkspaceActionPlacement } from "./components/WorkspaceActionPlacement"
 import { SidebarWorktreeActionPlacement } from "./components/SidebarWorktreeActionPlacement"
+import { WorkspaceContextWorktreeAction } from "./components/WorkspaceContextWorktreeAction"
 import { Button, Dialog, DialogContent, DialogTitle } from "./components/ui"
 import { WorktreesSettings } from "./components/WorktreesSettings"
 import { createWorktreeApi } from "./lib/api"
@@ -102,12 +103,14 @@ export const WorktreePlugin = {
     function WorktreeOverlay() {
       const [request, setRequest] = useState<{ target: Pick<Workspace, "path" | "title">; defaultBaseChoice: "current" | "main" } | null>(null)
       const [manageOpen, setManageOpen] = useState(false)
+      const [manageScope, setManageScope] = useState<string | undefined>()
       useEffect(() => {
         openCreate = (target, defaultBaseChoice = "current") => setRequest({ target, defaultBaseChoice })
         return () => { openCreate = () => {} }
       }, [])
       return <>
-        <SidebarWorktreeActionPlacement><Button type="button" className="dswt-sidebar-button" aria-label={t("worktrees")} title={t("worktrees")} onClick={() => setManageOpen(true)}><FolderGit2 size={16} /><span>{t("worktrees")}</span></Button></SidebarWorktreeActionPlacement>
+        <SidebarWorktreeActionPlacement><Button type="button" className="dswt-sidebar-button" aria-label={t("worktrees")} title={t("worktrees")} onClick={() => { setManageScope(undefined); setManageOpen(true) }}><FolderGit2 size={16} /><span>{t("worktrees")}</span></Button></SidebarWorktreeActionPlacement>
+        <WorkspaceContextWorktreeAction workspaces={workspaces}>{(workspace) => <Button type="button" className="dswt-context-menu-item" onClick={() => { setManageScope(workspace.path); setManageOpen(true) }}><FolderGit2 size={16} />{t("worktrees")}</Button>}</WorkspaceContextWorktreeAction>
         {request ? <CreateWorktreeDialog
           target={request.target}
           api={api}
@@ -117,7 +120,7 @@ export const WorktreePlugin = {
           onCreated={() => { void refreshClassification() }}
           onClose={() => setRequest(null)}
         /> : null}
-        <Dialog open={manageOpen} onOpenChange={setManageOpen}>{manageOpen ? <DialogContent className="dswt-management-dialog"><div className="dswt-dialog-heading"><DialogTitle className="dswt-dialog-title">{t("worktrees")}</DialogTitle></div><div className="dswt-management-body"><WorktreesSettings api={api} workspaces={workspaces} sessions={sessions} close={() => setManageOpen(false)} onCreate={(target) => { setManageOpen(false); openCreate(target, "main") }} /></div></DialogContent> : null}</Dialog>
+        <Dialog open={manageOpen} onOpenChange={setManageOpen}>{manageOpen ? <DialogContent className="dswt-management-dialog"><div className="dswt-dialog-heading"><DialogTitle className="dswt-dialog-title">{t("worktrees")}</DialogTitle></div><div className="dswt-management-body"><WorktreesSettings api={api} workspaces={workspaces} sessions={sessions} initialScope={manageScope} close={() => setManageOpen(false)} onCreate={(target) => { setManageOpen(false); openCreate(target, "main") }} /></div></DialogContent> : null}</Dialog>
       </>
     }
 
