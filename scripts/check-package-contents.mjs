@@ -7,7 +7,9 @@ import { promisify } from "node:util"
 const execFileAsync = promisify(execFile)
 const npmCache = join(process.cwd(), ".npm-cache")
 await mkdir(npmCache, { recursive: true })
-const { stdout } = await execFileAsync("npm", ["pack", "--dry-run", "--json"], {
+const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm"
+const npmArgs = process.platform === "win32" ? ["/d", "/s", "/c", "npm pack --dry-run --json"] : ["pack", "--dry-run", "--json"]
+const { stdout } = await execFileAsync(process.platform === "win32" ? process.env.ComSpec ?? "cmd.exe" : npmCommand, npmArgs, {
   encoding: "utf8",
   env: { ...process.env, npm_config_cache: npmCache },
 })
