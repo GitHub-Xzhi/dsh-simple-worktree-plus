@@ -1,5 +1,7 @@
 # DSH Simple Worktree Plus
 
+[English](README.md) | **简体中文**
+
 `@xzhi/dsh-simple-worktree-plus` 是一个用于 [DeepSeek Harness](https://github.com/deepseek-ai/DeepSeek-Harness) 的 Git Worktree 管理插件。
 
 本项目基于 [alpacachen/dsh-worktree](https://github.com/alpacachen/dsh-worktree) 的开源实现继续开发，感谢原项目提供的 Worktree 创建、Workspace 注册与隔离会话能力。
