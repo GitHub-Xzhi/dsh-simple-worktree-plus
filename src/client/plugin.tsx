@@ -15,7 +15,7 @@ import { CreateWorktreeDialog } from "./components/CreateWorktreeDialog"
 import { GitTreeIcon } from "./components/GitTreeIcon"
 import { NewSessionWorktreeButton } from "./components/NewSessionWorktreeButton"
 import { WorkspaceActionPlacement } from "./components/WorkspaceActionPlacement"
-import { TopbarWorktreeActionPlacement } from "./components/TopbarWorktreeActionPlacement"
+import { SidebarWorktreeActionPlacement } from "./components/SidebarWorktreeActionPlacement"
 import { Button, Dialog, DialogContent, DialogTitle } from "./components/ui"
 import { WorktreesSettings } from "./components/WorktreesSettings"
 import { createWorktreeApi } from "./lib/api"
@@ -107,7 +107,7 @@ export const WorktreePlugin = {
         return () => { openCreate = () => {} }
       }, [])
       return <>
-        <TopbarWorktreeActionPlacement><Button type="button" className="dswt-topbar-button" aria-label={t("worktrees")} title={t("worktrees")} onClick={() => setManageOpen(true)}><FolderGit2 size={16} /><span>{t("worktrees")}</span></Button></TopbarWorktreeActionPlacement>
+        <SidebarWorktreeActionPlacement><Button type="button" className="dswt-sidebar-button" aria-label={t("worktrees")} title={t("worktrees")} onClick={() => setManageOpen(true)}><FolderGit2 size={16} /><span>{t("worktrees")}</span></Button></SidebarWorktreeActionPlacement>
         {request ? <CreateWorktreeDialog
           target={request.target}
           api={api}
