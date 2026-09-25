@@ -120,7 +120,7 @@ export const WorktreePlugin = {
           onCreated={() => { void refreshClassification() }}
           onClose={() => setRequest(null)}
         /> : null}
-        <Dialog open={manageOpen} onOpenChange={setManageOpen}>{manageOpen ? <DialogContent className="dswt-management-dialog"><div className="dswt-dialog-heading"><DialogTitle className="dswt-dialog-title">{t("worktrees")}</DialogTitle></div><div className="dswt-management-body"><WorktreesSettings api={api} workspaces={workspaces} sessions={sessions} initialScope={manageScope} close={() => setManageOpen(false)} onCreate={(target) => { setManageOpen(false); openCreate(target, "main") }} /></div></DialogContent> : null}</Dialog>
+        <Dialog open={manageOpen} onOpenChange={setManageOpen}>{manageOpen ? <DialogContent className="dswt-management-dialog"><div className="dswt-dialog-heading"><DialogTitle className="dswt-dialog-title">{t("worktrees")}</DialogTitle></div><div className="dswt-management-body"><WorktreesSettings api={api} workspaces={workspaces} sessions={sessions} initialScope={manageScope} showHeader={false} close={() => setManageOpen(false)} onCreate={(target) => { setManageOpen(false); openCreate(target, "main") }} /></div></DialogContent> : null}</Dialog>
       </>
     }
 

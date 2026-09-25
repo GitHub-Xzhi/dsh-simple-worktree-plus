@@ -12,6 +12,7 @@ interface Props {
   close?: () => void
   onCreate?: (target: Pick<Workspace, "path" | "title">) => void
   initialScope?: string
+  showHeader?: boolean
 }
 type Filter = "all" | "linked" | "attention"
 type Tab = "worktrees" | "defaults"
@@ -22,7 +23,7 @@ const loadDeleteDefaults = () => {
   try { return JSON.parse(localStorage.getItem(DELETE_DEFAULTS_KEY) ?? "") } catch { return {} }
 }
 
-export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, initialScope }: Props) {
+export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, initialScope, showHeader = true }: Props) {
   const t = useT()
   const [repos, setRepos] = useState<WorktreeList[]>([])
   const [busy, setBusy] = useState(false)
@@ -136,9 +137,7 @@ export function WorktreesSettings({ api, workspaces, sessions, close, onCreate, 
   }
 
   return <section className="dswt-settings" aria-label={t("worktrees")}>
-    <header className="dswt-settings-header">
-      <div><h2>{t("worktrees")}</h2><p>{t("panelDescription")}</p></div>
-    </header>
+    {showHeader ? <header className="dswt-settings-header"><div><h2>{t("worktrees")}</h2><p>{t("panelDescription")}</p></div></header> : null}
     <div className="dswt-management-tabs" role="tablist" aria-label={t("worktrees")}><button type="button" role="tab" aria-selected={tab === "worktrees"} onClick={() => setTab("worktrees")}>{t("managementTab")}</button><button type="button" role="tab" aria-selected={tab === "defaults"} onClick={() => setTab("defaults")}>{t("deletionDefaults")}</button></div>
     {tab === "defaults" ? <fieldset className="dswt-delete-defaults"><legend>{t("deletionDefaults")}</legend><p>{t("deletionDefaultsHint")}</p><label className="dswt-delete-branch"><input type="checkbox" checked={defaultDeleteBranch} onChange={event => saveDeleteDefaults(event.target.checked, event.target.checked ? defaultForceDeleteBranch : false)} />{t("deleteBranch")}</label><label className="dswt-delete-branch"><input type="checkbox" checked={defaultForceDeleteBranch} disabled={!defaultDeleteBranch} onChange={event => saveDeleteDefaults(defaultDeleteBranch, event.target.checked)} />{t("forceDeleteBranch")}</label></fieldset> : <>
     <div className="dswt-toolbar">
