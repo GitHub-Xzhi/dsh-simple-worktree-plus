@@ -1,6 +1,6 @@
-﻿# DSH Simple Worktree Plus
+# DSH Simple Worktree Plus
 
-`@Xzhi/dsh-simple-worktree-plus` is a Git Worktree management plugin for [DeepSeek Harness](https://github.com/deepseek-ai/DeepSeek-Harness).
+`@xzhi/dsh-simple-worktree-plus` is a Git Worktree management plugin for [DeepSeek Harness](https://github.com/deepseek-ai/DeepSeek-Harness).
 
 This project continues the open-source work of [alpacachen/dsh-worktree](https://github.com/alpacachen/dsh-worktree). Thank you to the original project for the Worktree creation, Workspace registration, and isolated-session foundation.
 
@@ -9,7 +9,7 @@ The Plus edition extends deletion policies, management entry points, and per-Wor
 ## Install
 
 ```sh
-dsh plugin --profile web add @Xzhi/dsh-simple-worktree-plus
+dsh plugin --profile web add @xzhi/dsh-simple-worktree-plus
 ```
 
 Restart `dsh web` and refresh the page after installation or upgrade.
@@ -32,7 +32,7 @@ Restart `dsh web` and refresh the page after installation or upgrade.
 | Sidebar entry | Opens Worktree Management immediately above **Settings** in the sidebar. |
 | Scoped Workspace management | Right-click a Workspace to open Worktree Management scoped to that Workspace only. |
 | Deletion default preferences | Configure the default checkbox states used the next time a deletion dialog opens. |
-| Independent plugin identity | Uses the `@Xzhi/dsh-simple-worktree-plus` package and DSH plugin identity. |
+| Independent plugin identity | Uses the `@xzhi/dsh-simple-worktree-plus` package and DSH plugin identity. |
 
 ## Warning
 

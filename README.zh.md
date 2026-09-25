@@ -1,6 +1,6 @@
-﻿# DSH Simple Worktree Plus
+# DSH Simple Worktree Plus
 
-`@Xzhi/dsh-simple-worktree-plus` 是一个用于 [DeepSeek Harness](https://github.com/deepseek-ai/DeepSeek-Harness) 的 Git Worktree 管理插件。
+`@xzhi/dsh-simple-worktree-plus` 是一个用于 [DeepSeek Harness](https://github.com/deepseek-ai/DeepSeek-Harness) 的 Git Worktree 管理插件。
 
 本项目基于 [alpacachen/dsh-worktree](https://github.com/alpacachen/dsh-worktree) 的开源实现继续开发，感谢原项目提供的 Worktree 创建、Workspace 注册与隔离会话能力。
 
@@ -9,7 +9,7 @@
 ## 安装
 
 ```sh
-dsh plugin --profile web add @Xzhi/dsh-simple-worktree-plus
+dsh plugin --profile web add @xzhi/dsh-simple-worktree-plus
 ```
 
 安装或升级后重启 `dsh web`，再刷新页面。
@@ -32,7 +32,7 @@ dsh plugin --profile web add @Xzhi/dsh-simple-worktree-plus
 | 侧边栏管理入口 | 在左侧边栏 **设置** 上方提供 Worktree 管理入口。 |
 | 指定 Workspace 管理 | 右键某个 Workspace 后打开仅针对该 Workspace 的 Worktree 管理。 |
 | 删除选项默认值 | 可在 Worktree 管理中设置下次打开删除确认弹窗时的默认勾选状态。 |
-| 插件独立命名 | 包名和 DSH 插件标识调整为 `@Xzhi/dsh-simple-worktree-plus`，可与原插件区分安装。 |
+| 插件独立命名 | 包名和 DSH 插件标识调整为 `@xzhi/dsh-simple-worktree-plus`，可与原插件区分安装。 |
 
 ## 风险提示
 

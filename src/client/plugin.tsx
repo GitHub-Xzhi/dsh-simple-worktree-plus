@@ -41,7 +41,7 @@ function installStyles() {
 }
 
 export const WorktreePlugin = {
-  name: "@Xzhi/dsh-simple-worktree-plus",
+  name: "@xzhi/dsh-simple-worktree-plus",
   inject: ["slots", "connection", "locale", "workspaces", "sessions"],
   apply(ctx: WorktreeClientContext) {
     ctx.effect(installStyles, "dsh-simple-worktree-plus styles")
