@@ -1,4 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from "react"
+import { FolderGit2 } from "lucide-react"
 import type { Context } from "@deepseek-ai/cordis"
 import type { ConnectionHandle } from "@deepseek-ai/dsh-client-connection/client"
 import type { PropsRuntime } from "@deepseek-ai/dsh-client-ui-slots"
@@ -14,6 +15,8 @@ import { CreateWorktreeDialog } from "./components/CreateWorktreeDialog"
 import { GitTreeIcon } from "./components/GitTreeIcon"
 import { NewSessionWorktreeButton } from "./components/NewSessionWorktreeButton"
 import { WorkspaceActionPlacement } from "./components/WorkspaceActionPlacement"
+import { TopbarWorktreeActionPlacement } from "./components/TopbarWorktreeActionPlacement"
+import { Button, Dialog, DialogContent, DialogTitle } from "./components/ui"
 import { WorktreesSettings } from "./components/WorktreesSettings"
 import { createWorktreeApi } from "./lib/api"
 import { installLocale, NS, t } from "./lib/i18n"
@@ -98,23 +101,24 @@ export const WorktreePlugin = {
 
     function WorktreeOverlay() {
       const [request, setRequest] = useState<{ target: Pick<Workspace, "path" | "title">; defaultBaseChoice: "current" | "main" } | null>(null)
+      const [manageOpen, setManageOpen] = useState(false)
       useEffect(() => {
         openCreate = (target, defaultBaseChoice = "current") => setRequest({ target, defaultBaseChoice })
         return () => { openCreate = () => {} }
       }, [])
-      return request ? (
-        <CreateWorktreeDialog
+      return <>
+        <TopbarWorktreeActionPlacement><Button type="button" className="dswt-topbar-button" aria-label={t("worktrees")} title={t("worktrees")} onClick={() => setManageOpen(true)}><FolderGit2 size={16} /><span>{t("worktrees")}</span></Button></TopbarWorktreeActionPlacement>
+        {request ? <CreateWorktreeDialog
           target={request.target}
           api={api}
           workspaces={workspaces}
           sessions={sessions}
           defaultBaseChoice={request.defaultBaseChoice}
-          onCreated={() => {
-            void refreshClassification()
-          }}
+          onCreated={() => { void refreshClassification() }}
           onClose={() => setRequest(null)}
-        />
-      ) : null
+        /> : null}
+        <Dialog open={manageOpen} onOpenChange={setManageOpen}>{manageOpen ? <DialogContent className="dswt-management-dialog"><div className="dswt-dialog-heading"><DialogTitle className="dswt-dialog-title">{t("worktrees")}</DialogTitle></div><div className="dswt-management-body"><WorktreesSettings api={api} workspaces={workspaces} sessions={sessions} close={() => setManageOpen(false)} onCreate={(target) => { setManageOpen(false); openCreate(target, "main") }} /></div></DialogContent> : null}</Dialog>
+      </>
     }
 
     function WorktreeDock(props: PropsRuntime<"conversation.input.dock">) {

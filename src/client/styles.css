@@ -153,6 +153,13 @@
   .dswt-preserved { display: flex; align-items: center; gap: 6px; margin: 12px 0 0; color: var(--wt-secondary); font-size: 12px; }
   .dswt-delete-branch { display: flex; align-items: center; gap: 8px; margin: 14px 0 0; color: var(--wt-text); font-size: 12px; line-height: 20px; cursor: pointer; }
   .dswt-delete-branch input { width: 14px; height: 14px; accent-color: var(--wt-danger); }
+  .dswt-topbar-action { display: inline-flex; flex: none; align-items: center; margin-left: 4px; }
+  .dswt-topbar-action:empty { display: none; }
+  .dswt-topbar-button { min-height: 30px; padding: 4px 9px; border-color: transparent; color: var(--dsw-alias-label-secondary); font-size: 12px; }
+  .dswt-topbar-button:hover:not(:disabled) { background: var(--dsw-alias-interactive-bg-hover); color: var(--dsw-alias-label-primary); }
+  .dswt-management-dialog { width: min(760px, calc(100vw - 32px)); }
+  .dswt-management-body { padding: 12px 24px 18px; }
+  .dswt-management-body .dswt-settings { max-height: min(650px, calc(100dvh - 180px)); overflow: auto; padding-right: 4px; }
   .dswt-hero-action { display: inline-flex; flex: none; align-items: center; }
   .dswt-hero-action:empty { display: none; }
   .dswt-new-session-action { display: inline-flex; flex: none; align-items: center; margin: 0; padding: 0; }

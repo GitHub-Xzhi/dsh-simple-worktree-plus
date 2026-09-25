@@ -2,6 +2,7 @@ import z from '@deepseek-ai/schemastery'
 import { clientRequestSchema } from '@deepseek-ai/dsh-client-connection'
 import { readdir, readFile, rm } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
+import { join } from 'node:path'
 
 const API_PREFIX = '/api/dsh-simple-worktree'
 const ENDPOINTS = ['worktree.list', 'worktree.scan', 'worktree.classify', 'worktree.create', 'worktree.remove', 'worktree.remove-session', 'worktree.status', 'worktree.prune']
@@ -111,7 +112,7 @@ export async function discoverGitRoots(rootPath, { signal, maxDepth = 4, maxDire
       for (const entry of entries) {
         if (!entry.isDirectory() || entry.isSymbolicLink() || IGNORED_SCAN_DIRECTORIES.has(entry.name)) continue
         if (entry.name.startsWith('.') && entry.name !== '.worktrees') continue
-        queue.push({ path: `${path}/${entry.name}`, depth: depth + 1 })
+        queue.push({ path: join(path, entry.name), depth: depth + 1 })
       }
     }))
   }
