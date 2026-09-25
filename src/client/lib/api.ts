@@ -44,7 +44,7 @@ export function createWorktreeApi(connection: ConnectionService) {
     scan: (paths: string[], signal?: AbortSignal) => read<WorktreeList[]>("worktree.scan", { paths }, signal),
     classify: (path: string) => read<WorktreeClassification>("worktree.classify", { path }),
     create: (payload: { repoPath: string; path: string; branch: string; baseRef: string }) => call<CreateWorktreeResult>("worktree.create", payload),
-    remove: (payload: { repoPath: string; path: string }) => call<{ removed: boolean; path: string }>("worktree.remove", payload),
+    remove: (payload: { repoPath: string; path: string; branch?: string; deleteBranch?: boolean }) => call<{ removed: boolean; path: string; branchDeleted?: boolean }>("worktree.remove", payload),
     status: (path: string, signal?: AbortSignal) => read<WorktreeStatus>("worktree.status", { path }, signal),
     prune: (path: string) => call<{ pruned: boolean }>("worktree.prune", { path }),
   }

@@ -256,18 +256,22 @@ export function apply(ctx) {
     if (endpoint === 'worktree.remove') return recover(async () => {
       const repoPath = typeof payload.repoPath === 'string' ? payload.repoPath.trim() : ''
       const path = typeof payload.path === 'string' ? payload.path.trim() : ''
+      const branch = typeof payload.branch === 'string' ? payload.branch.trim() : ''
+      const deleteBranch = payload.deleteBranch === true
       if (!repoPath || !path) throw new Error('Repository and worktree paths are required.')
+      let orphaned = false
+      let pruned = false
       try {
         await runGit(ctx.subprocess, repoPath, ['worktree', 'remove', path])
       } catch (error) {
-        if (await removeOrphanedWorktree(path)) return { removed: true, path, orphaned: true }
-        if (!existsSync(path) && existsSync(repoPath)) {
+        if (await removeOrphanedWorktree(path)) orphaned = true
+        else if (!existsSync(path) && existsSync(repoPath)) {
           await runGit(ctx.subprocess, repoPath, ['worktree', 'prune'])
-          return { removed: true, path, pruned: true }
-        }
-        throw error
+          pruned = true
+        } else throw error
       }
-      return { removed: true, path }
+      if (deleteBranch && branch) await runGit(ctx.subprocess, repoPath, ['branch', '-d', branch])
+      return { removed: true, path, orphaned, pruned, branchDeleted: deleteBranch && Boolean(branch) }
     })
 
     if (endpoint === 'worktree.remove-session') return recover(async () => {

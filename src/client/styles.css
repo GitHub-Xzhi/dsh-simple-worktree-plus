@@ -151,6 +151,8 @@
   .dswt-remove-target strong { font-size: 13px; font-weight: 500; overflow-wrap: anywhere; }
   .dswt-remove-target code { display: block; overflow-wrap: anywhere; margin-top: 5px; color: var(--wt-secondary); font-size: 11px; line-height: 19px; }
   .dswt-preserved { display: flex; align-items: center; gap: 6px; margin: 12px 0 0; color: var(--wt-secondary); font-size: 12px; }
+  .dswt-delete-branch { display: flex; align-items: center; gap: 8px; margin: 14px 0 0; color: var(--wt-text); font-size: 12px; line-height: 20px; cursor: pointer; }
+  .dswt-delete-branch input { width: 14px; height: 14px; accent-color: var(--wt-danger); }
   .dswt-hero-action { display: inline-flex; flex: none; align-items: center; }
   .dswt-hero-action:empty { display: none; }
   .dswt-new-session-action { display: inline-flex; flex: none; align-items: center; margin: 0; padding: 0; }
