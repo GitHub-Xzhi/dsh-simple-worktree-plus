@@ -115,7 +115,9 @@
   .dswt-scan-help p { padding-top: 6px; max-width: 520px; }
 
   .dswt-dialog-overlay { position: fixed; inset: 0; z-index: 1000; background: var(--dsw-alias-bg-mask-1); backdrop-filter: var(--dsw-mask-blur); }
-  .dswt-dialog-content { position: fixed; z-index: 1001; top: 50%; left: 50%; display: flex; flex-direction: column; width: min(460px, calc(100vw - 32px)); max-height: min(740px, calc(100dvh - 40px)); transform: translate(-50%, -50%); border: 1px solid var(--wt-line); border-radius: 18px; outline: none; background: var(--dsw-specific-menu); box-shadow: var(--dsw-shadow-lv3); overflow: auto; }
+  /* `--dsw-specific-menu` became a translucent material in DSH 0.2. Use the
+     opaque modal layer instead; it is also available in 0.1.5-rc.2. */
+  .dswt-dialog-content { position: fixed; z-index: 1001; top: 50%; left: 50%; display: flex; flex-direction: column; width: min(460px, calc(100vw - 32px)); max-height: min(740px, calc(100dvh - 40px)); transform: translate(-50%, -50%); border: 1px solid var(--wt-line); border-radius: 18px; outline: none; background: var(--dsw-alias-bg-layer-2, var(--dsw-specific-menu)); box-shadow: var(--dsw-elevation-prominent, var(--dsw-shadow-lv3)); overflow: auto; }
   .dswt-dialog-close { position: absolute; top: 14px; right: 14px; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 0; border-radius: 8px; padding: 0; color: var(--wt-muted); background: transparent; cursor: pointer; }
   .dswt-dialog-close:hover:not(:disabled) { color: var(--wt-text); background: var(--wt-hover); }
   .dswt-dialog-close:disabled { opacity: .4; cursor: not-allowed; }
