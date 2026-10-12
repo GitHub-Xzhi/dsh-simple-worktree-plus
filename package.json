@@ -1,6 +1,6 @@
 {
   "name": "@xzhi/dsh-simple-worktree-plus",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "A Git worktree plugin for DeepSeek Harness that creates task branches, registers worktrees as DSH Workspaces, and opens isolated sessions.",
   "license": "MIT",
   "keywords": [
@@ -50,8 +50,8 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.2",
-    "@deepseek-ai/dsh-client-connection": "^0.1.5-rc.2",
-    "@deepseek-ai/dsh-settings": "^0.1.5-rc.2",
+    "@deepseek-ai/dsh-client-connection": "^0.1.5-rc.2 || ^0.2.0-rc.2",
+    "@deepseek-ai/dsh-settings": "^0.1.5-rc.2 || ^0.2.0-rc.2",
     "@deepseek-ai/schemastery": "^3.18.2"
   },
   "dsh": {
@@ -71,10 +71,11 @@
       "platform": "web"
     },
     "compatibility": {
-      "dsh": "0.1.5-rc.1 || 0.1.5-rc.2",
+      "dsh": "0.1.5-rc.1 || 0.1.5-rc.2 || 0.2.0-rc.2",
       "dshReleases": {
         "0.1.5-rc.1": "compatible",
-        "0.1.5-rc.2": "compatible"
+        "0.1.5-rc.2": "compatible",
+        "0.2.0-rc.2": "compatible"
       },
       "profiles": [
         "web"
