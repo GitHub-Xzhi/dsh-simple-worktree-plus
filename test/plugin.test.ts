@@ -29,7 +29,7 @@ describe("WorktreePlugin compatibility", () => {
     }
 
     expect(() => WorktreePlugin.apply(ctx as any)).not.toThrow()
-    expect(registeredSlots).toEqual(["conversation.input.dock", "shell.overlay", "settings.section"])
+    expect(registeredSlots).toEqual(["conversation.input.dock", "shell.overlay", "sidebar.footer.action", "settings.section"])
     expect(WorktreePlugin.inject).toEqual(["slots", "connection", "locale", "workspaces", "sessions"])
   })
 })

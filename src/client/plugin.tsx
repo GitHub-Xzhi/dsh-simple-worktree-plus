@@ -64,6 +64,7 @@ export const WorktreePlugin = {
     }
     let active = true
     let openCreate: (workspace: Pick<Workspace, "path" | "title">, defaultBaseChoice?: "current" | "main") => void = () => {}
+    let openManagement: () => void = () => {}
     let refreshGeneration = 0
 
     const refreshClassification = async () => {
@@ -100,16 +101,31 @@ export const WorktreePlugin = {
       }
     }, "dsh-simple-worktree-plus workspace classification")
 
+    function ManagementButton({ native = false, onOpen }: { native?: boolean; onOpen: () => void }) {
+      return <Button
+        type="button"
+        className="dswt-sidebar-button"
+        aria-label={t("worktrees")}
+        title={t("worktrees")}
+        data-dswt-native-sidebar-action={native ? "" : undefined}
+        onClick={onOpen}
+      ><FolderGit2 size={16} /><span>{t("worktrees")}</span></Button>
+    }
+
     function WorktreeOverlay() {
       const [request, setRequest] = useState<{ target: Pick<Workspace, "path" | "title">; defaultBaseChoice: "current" | "main" } | null>(null)
       const [manageOpen, setManageOpen] = useState(false)
       const [manageScope, setManageScope] = useState<string | undefined>()
       useEffect(() => {
         openCreate = (target, defaultBaseChoice = "current") => setRequest({ target, defaultBaseChoice })
-        return () => { openCreate = () => {} }
+        openManagement = () => { setManageScope(undefined); setManageOpen(true) }
+        return () => {
+          openCreate = () => {}
+          openManagement = () => {}
+        }
       }, [])
       return <>
-        <SidebarWorktreeActionPlacement><Button type="button" className="dswt-sidebar-button" aria-label={t("worktrees")} title={t("worktrees")} onClick={() => { setManageScope(undefined); setManageOpen(true) }}><FolderGit2 size={16} /><span>{t("worktrees")}</span></Button></SidebarWorktreeActionPlacement>
+        <SidebarWorktreeActionPlacement><ManagementButton onOpen={() => openManagement()} /></SidebarWorktreeActionPlacement>
         <WorkspaceContextWorktreeAction workspaces={workspaces}>{(workspace) => <Button type="button" className="dswt-context-menu-item" onClick={() => { setManageScope(workspace.path); setManageOpen(true) }}><FolderGit2 size={16} />{t("worktrees")}</Button>}</WorkspaceContextWorktreeAction>
         {request ? <CreateWorktreeDialog
           target={request.target}
@@ -146,6 +162,13 @@ export const WorktreePlugin = {
     ctx.slots.inject("shell.overlay", () => ctx.slots.register(
       { name: "shell.overlay", id: "dsh-simple-worktree-plus-create", order: 30, label: () => t("createWorktree") },
       WorktreeOverlay,
+    ))
+
+    // DSH 0.2 declares this stable sidebar footer slot. Its inject callback is
+    // never invoked on 0.1, where WorktreeOverlay keeps the legacy placement.
+    ctx.slots.inject("sidebar.footer.action", () => ctx.slots.register(
+      { name: "sidebar.footer.action", id: "dsh-simple-worktree-plus-manage", order: -20, label: () => t("worktrees") },
+      () => <ManagementButton native onOpen={() => openManagement()} />,
     ))
 
     // Register a first-class Settings sidebar section, alongside Plugins and
